@@ -10,4 +10,5 @@ module.exports = function (router, tokenValidator) {
 	require('../user/user.server.route')(router, tokenValidator);
 	require('../datacenter/datacenter.server.route')(router, tokenValidator);
 	require('../process/process.server.route')(router, tokenValidator);
+	require('../scanner/scanner.server.route')(router, tokenValidator);
 };
