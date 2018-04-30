@@ -4,7 +4,9 @@
 
 'use strict';
 const cluster = require('cluster'); // To fork the workers and make server more scalable and efficient
-const { CONFIG } = require('../config/config');
+const {
+	CONFIG
+} = require('../config/config');
 
 if (cluster.isMaster) {
 	let numWorkers = require('os').cpus().length;
@@ -16,12 +18,12 @@ if (cluster.isMaster) {
 		cluster.fork();
 	}
 
-	cluster.on('online', function(worker) {
+	cluster.on('online', function (worker) {
 		console.log('Worker ' + worker.process.pid + ' is online');
 	});
 
 	// If something goes wrong and the worker is killed, start new worker
-	cluster.on('exit', function(worker, code, signal) {
+	cluster.on('exit', function (worker, code, signal) {
 		console.log('Worker ' + worker.process.pid + ' died with code: ' + code + ', and signal: ' + signal);
 		cluster.fork();
 	});
@@ -50,17 +52,22 @@ if (cluster.isMaster) {
 	const numberOfDaysToCache = 0.5; // days
 	const cacheTime = 86400000 * numberOfDaysToCache; // 1 days
 	// Static folder to server index.html
-	app.use(express.static(PUBLIC_FOLDER, { maxAge: cacheTime }));
+	app.use(express.static(PUBLIC_FOLDER, {
+		maxAge: cacheTime
+	}));
 
-	const validateRequest = function(req, res, next) {
+	const validateRequest = function (req, res, next) {
 		// check header or url parameters or post parameters for token
 		var token = req.headers['x-access-token'] || req.body.token || req.query.token;
 		// decode token
 		if (token) {
 			// verifies secret and checks exp
-			jwt.verify(token, CONFIG.webTokenKey, function(err, decoded) {
+			jwt.verify(token, CONFIG.webTokenKey, function (err, decoded) {
 				if (err) {
-					return res.json({ success: false, message: 'Failed to authenticate token.' });
+					return res.json({
+						success: false,
+						message: 'Failed to authenticate token.'
+					});
 				} else {
 					// if everything is good, save to request for use in other routes
 					req.decoded = decoded;
@@ -93,7 +100,7 @@ if (cluster.isMaster) {
 	/**load route file*/
 	require('./routes/router')(router, validateRequest);
 
-	app.use(function(req, res, next) {
+	app.use(function (req, res, next) {
 		res.status(404);
 
 		// respond with html page
@@ -105,7 +112,9 @@ if (cluster.isMaster) {
 
 		// respond with json
 		if (req.accepts('json')) {
-			res.send({ error: 'Not found' });
+			res.send({
+				error: 'Not found'
+			});
 			return;
 		}
 
@@ -118,7 +127,10 @@ if (cluster.isMaster) {
 		try {
 			let privateKey = fs.readFileSync(path.resolve(CONFIG.server.private_key)).toString();
 			let certificate = fs.readFileSync(path.resolve(CONFIG.server.certificate)).toString();
-			let credentials = { key: privateKey, cert: certificate };
+			let credentials = {
+				key: privateKey,
+				cert: certificate
+			};
 			let httpsServer = _https.createServer(credentials, app);
 			httpsServer.listen(CONFIG.server.https_port || 443, (e) => {
 				if (e) {
@@ -126,6 +138,7 @@ if (cluster.isMaster) {
 				}
 				console.log('HTTPS Server Started at port : ', CONFIG.server.https_port);
 			});
+			httpsServer.timeout = CONFIG.server.timeout;
 		} catch (e) {
 			console.log(e);
 			console.log('Failed to load the privateKey and certificate');
@@ -139,11 +152,13 @@ if (cluster.isMaster) {
 		let _http = require('http');
 
 		let httpServer = _http.createServer(app);
-		app.listen(CONFIG.server.port, (e) => {
+		let server = app.listen(CONFIG.server.port, (e) => {
 			if (e) {
 				return console.log('Failed to start server:', e);
 			}
 			console.log('HTTP Server Started at port : ', CONFIG.server.port);
 		});
+		server.timeout = CONFIG.server.timeout;
+
 	}
 }

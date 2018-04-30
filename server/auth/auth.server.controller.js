@@ -84,13 +84,15 @@ const authenticate = function (options) {
 
 		// Add domain to the userID
 		// logger.WARN(new Date().toLocaleString() + ': LOGIN tried by : ' + loginId);
+		username = username.replace(/@.*$/, '');
+		username += '@yodlee.com';
+		console.log(`${username} trying to login`);
+		// if (!/@yodlee.com$/i.test(username)) {
+		// }
 
-		if (!/@yodlee.com$/i.test(username)) {
-			username += '@yodlee.com';
-		}
 		let opts = {
 			url: CONFIG.server.ldapURL,
-			baseDN: 'dc=corp,dc=yodlee,dc=com',
+			baseDN: 'dc=corp,dc=yodlee,dc=com,dc=company,cn=UserName,ou=employees,ou=company users',
 			username: username,
 			password: pTextPassword,
 			attributes: {
