@@ -12,4 +12,5 @@ module.exports = function (router, tokenValidator) {
 	require('../process/process.server.route')(router, tokenValidator);
 	require('../scanner/scanner.server.route')(router, tokenValidator);
 	require('../exception/exception.server.route')(router, tokenValidator);
+	require('../cobrand/cobrand.server.route')(router, tokenValidator);
 };
