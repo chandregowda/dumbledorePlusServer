@@ -41,7 +41,12 @@ CobrandSchema.statics = {
    * Find all
    */
   get: function (query, callback) {
-    this.find(query, callback);
+    this.find(query, {}, {
+      sort: {
+        "cobrandGroup": 1,
+        "cobrandName": 1
+      }
+    }, callback)
   },
 
   updateById: function (query, updateData, callback) {

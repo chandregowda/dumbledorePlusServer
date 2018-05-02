@@ -92,7 +92,7 @@ const authenticate = function (options) {
 
 		let opts = {
 			url: CONFIG.server.ldapURL,
-			baseDN: 'dc=corp,dc=yodlee,dc=com,dc=company,cn=UserName,ou=employees,ou=company users',
+			baseDN: 'dc=corp,dc=yodlee,dc=com',
 			username: username,
 			password: pTextPassword,
 			attributes: {
