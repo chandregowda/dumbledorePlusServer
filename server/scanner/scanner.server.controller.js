@@ -31,8 +31,10 @@ Scanner.getComponentExceptionSummary = function (req, res) {
   //   message: "Scanned Output"
   // })
 
-
   var url = 'https://dumbledore.yodlee.com/capi/getComponentExceptionSummary';
+
+  filters.environment = filters.environments ? filters.environments[0] : null;
+  filters.datacenter = filters.datacenters ? filters.datacenters[0] : null;
 
   let requestTimeOut = 1000 * 60 * 60; // 1hr
   var options = {
@@ -49,23 +51,6 @@ Scanner.getComponentExceptionSummary = function (req, res) {
       console.error('error posting json: ', err)
       res.status(400).send(err)
     }
-    var headers = httpRes.headers
-    var statusCode = httpRes.statusCode
-    // console.log('headers: ', headers)
-    // console.log('statusCode: ', statusCode)
-    // console.log('result: ', result)
-    // console.log(typeof (result));
-    // let summary = "";
-    // if (typeof (result) == 'object') {
-    //   try {
-    //     summary = JSON.stringify(JSON.parse(result));
-    //   } catch (e) {
-    //     console.log('JSON Conversion error', e)
-    //   }
-    // } else {
-    //   summary = result;
-    // }
-    // console.log("SUMMARY: ", summary);
 
     saveExceptionSummary({
       accountName: filters.mailTo ? filters.mailTo.replace(/@.*$/, '') : 'unknown',
