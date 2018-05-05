@@ -9,6 +9,20 @@ module.exports = {
   Download
 };
 
+/*
+{
+"environment":"production",
+"datacenter": "SC9",
+"ip":"172.17.80.166",
+"instance":11,
+"component": "ALERTS",
+"filename": "/var/log/jboss_instance-11/server.log.2018050404.2018050405.gz",
+"extractedFile":"production-sc9-server-172_17_80_166-11-ALERTS-1525500876150-cgowda.log.gz",
+"logFileDate":"2018-05-05",
+"generatedBy":"cgowda"
+}
+
+*/
 Download.create = function (req, res) {
   console.log("Creating Download with ", req.body)
   DownloadModel.create(req.body, function (err, result) {
@@ -31,11 +45,17 @@ Download.create = function (req, res) {
 };
 // Get
 Download.get = function (req, res) {
-  let query = req.query.accountName && req.query.accountName.trim() ? {
-    accountName: req.query.accountName.trim()
+  let query = req.body.filename && req.body.filename.trim() ? {
+    filename: req.body.filename.trim()
   } : {};
-  if (req.query.id && req.query.id.trim()) {
-    query._id = req.query.id.trim();
+  if (req.body.ip && req.body.ip.trim()) {
+    query.ip = req.body.ip.trim();
+  }
+  if (req.body.instance && parseInt(req.body.instance)) {
+    query.instance = req.body.instance;
+  }
+  if (req.body.component && req.body.component.trim()) {
+    query.component = req.body.component.trim();
   }
 
   DownloadModel.get(query, function (err, result = {}) {

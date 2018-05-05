@@ -5,6 +5,14 @@ const moment = require('moment');
 
 const Schema = mongoose.Schema;
 const DownloadSchema = new Schema({
+  environment: {
+    type: String,
+    required: true
+  },
+  datacenter: {
+    type: String,
+    required: true
+  },
   ip: {
     type: String,
     required: true
@@ -17,7 +25,7 @@ const DownloadSchema = new Schema({
     type: String,
     default: true
   },
-  sourceLogPath: {
+  extractedFile: {
     type: String,
     required: true
   },
@@ -29,7 +37,7 @@ const DownloadSchema = new Schema({
     type: String,
     required: true
   },
-  createdBy: {
+  generatedBy: {
     type: String,
     required: true
   }
