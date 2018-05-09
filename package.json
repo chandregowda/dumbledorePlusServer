@@ -15,6 +15,7 @@
 		"compression": "^1.7.2",
 		"cors": "^2.8.4",
 		"express": "^4.16.3",
+		"fs-extra": "^6.0.0",
 		"json2xls": "^0.1.2",
 		"jsonwebtoken": "^8.2.0",
 		"moment": "^2.21.0",

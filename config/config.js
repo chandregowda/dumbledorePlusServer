@@ -15,6 +15,7 @@ var CONFIG = {
 		proxyServer: '' // Set it to blank for Dev and QA box
 		// proxyServer: 'http://172.18.7.250:3128' // This should be set to 'http://172.18.7.250:3128' for STAGE
 	},
+	processDetailsFilePath: './public/downloads/',
 	webTokenKey: 'Agn18r@Hm05&C',
 	// mailServerConfig is to send mail on Feedback
 	mailServerConfig: {

@@ -56,6 +56,19 @@ if (cluster.isMaster) {
 		maxAge: cacheTime
 	}));
 
+	app.use(function (req, res, next) {
+		let ip = req.headers['x-forwarded-for'] ||
+			req.connection.remoteAddress ||
+			req.socket.remoteAddress ||
+			req.connection.socket.remoteAddress;
+
+		let requestURL = parseurl(req);
+
+		// console.log(username + " from " + ip + " requesting : " + JSON.stringify(requestURL));
+		console.log((new Date()).toLocaleString() + " : " + ip + " requesting : " + requestURL.path);
+		next();
+	})
+
 	const validateRequest = function (req, res, next) {
 		// check header or url parameters or post parameters for token
 		var token = req.headers['x-access-token'] || req.body.token || req.query.token;
@@ -70,6 +83,15 @@ if (cluster.isMaster) {
 					});
 				} else {
 					// if everything is good, save to request for use in other routes
+					// console.log("Request :", decoded.displayName);
+					let ip = req.headers['x-forwarded-for'] ||
+						req.connection.remoteAddress ||
+						req.socket.remoteAddress ||
+						req.connection.socket.remoteAddress;
+
+					let requestURL = parseurl(req);
+					console.log((new Date()).toLocaleString() + " : " + decoded.displayName + " from " + ip + " requesting : " + requestURL.path);
+
 					req.decoded = decoded;
 					next();
 				}

@@ -36,7 +36,12 @@ ExceptionSchema.statics = {
    * Find all
    */
   get: function (query, callback) {
-    this.find(query, callback);
+    this.find(query, {}, {
+      sort: {
+        "_id": -1, // Sort by descending order
+      },
+      limit: 50
+    }, callback);
   },
 
   removeById: function (removeData, callback) {
