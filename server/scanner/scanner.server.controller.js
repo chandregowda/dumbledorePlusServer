@@ -21,8 +21,8 @@ function saveExceptionSummary(body) {
   });
 };
 
-Scanner.getComponentExceptionSummary = function (req, res) {
-  // console.log("Log Exception summary in getComponentExceptionSummary")
+Scanner.getLogSummary = function (req, res) {
+  // console.log("Log Exception summary in getLogSummary")
 
   let filters = req.body;
   // console.log(JSON.stringify(req.body, undefined, 2))
@@ -31,10 +31,16 @@ Scanner.getComponentExceptionSummary = function (req, res) {
   //   message: "Scanned Output"
   // })
 
-  var url = 'https://dumbledore.yodlee.com/capi/getComponentExceptionSummary';
+  let url = 'https://dumbledore.yodlee.com/capi/getComponentExceptionSummary';
+  if (filters.logType === 'access') {
+    url = 'https://dumbledore.yodlee.com/capi/getApiForManyInstance';
+    filters.environments = filters.environments ? filters.environments[0] : null;
+    filters.datacenters = filters.datacenters ? filters.datacenters[0] : null;
+  } else {
+    filters.environment = filters.environments ? filters.environments[0] : null;
+    filters.datacenter = filters.datacenters ? filters.datacenters[0] : null;
+  }
 
-  filters.environment = filters.environments ? filters.environments[0] : null;
-  filters.datacenter = filters.datacenters ? filters.datacenters[0] : null;
 
   let requestTimeOut = 1000 * 60 * 60; // 1hr
   var options = {
@@ -52,11 +58,17 @@ Scanner.getComponentExceptionSummary = function (req, res) {
       res.status(400).send(err)
     }
 
-    saveExceptionSummary({
-      accountName: filters.mailTo ? filters.mailTo.replace(/@.*$/, '') : 'unknown',
-      summary: result,
-      filters
-    }).then(d => console.log('Successfully saved Exception Summary')).catch(e => console.log(e))
+    // if (filters.logType === 'access') {
+    //   console.log("Have to save API result in DB");
+    // } else {
+    if (result && result.length) {
+      saveExceptionSummary({
+        accountName: filters.mailTo ? filters.mailTo.replace(/@.*$/, '') : 'unknown',
+        summary: result,
+        filters
+      }).then(d => console.log('Successfully saved Log Summary')).catch(e => console.log(e))
+    }
+    // }
 
     res.send(result);
   })

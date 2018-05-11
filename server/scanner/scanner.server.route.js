@@ -5,5 +5,5 @@ const {
 // API Server Endpoints
 module.exports = function (router, tokenValidator) {
   /** DB Activities */
-  router.post('/scanner/getComponentExceptionSummary', tokenValidator, Scanner.getComponentExceptionSummary);
+  router.post('/scanner/getLogSummary', tokenValidator, Scanner.getLogSummary);
 };
