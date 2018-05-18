@@ -45,7 +45,7 @@ Exception.delete = function (req, res) {
   });
 };
 
-Exception.downloadLogFile = function (req, res) {
+Exception.generateExceptionLogFile = function (req, res) {
   // console.log("Downloading Files for ", JSON.stringify(req.body, undefined, 2));
 
   let requestTimeOut = 1000 * 60 * 60; // 1hr
@@ -62,7 +62,6 @@ Exception.downloadLogFile = function (req, res) {
       console.error('error posting json: ', err)
       res.status(400).send(err)
     }
-    console.log("DOWNLOADING RESULT: ", result)
     res.send(result);
   });
   // return res.json(req.body)

@@ -47,11 +47,11 @@ exports.writeToExcel = function ({
           return reject("Something went wrong to zip" + stderr);
         } else {
           // console.log("Gzipped " + xlsFileName + " Excel successfully");
-          return resolve("Gzipped " + xlsFileName + " Excel successfully");
+          return resolve(xlsFileName);
         }
       });
     }
     // console.log("Created" + xlsFileName + " Excel successfully")
-    return resolve("Created" + xlsFileName + " Excel successfully")
+    return resolve(xlsFileName)
   })
 };

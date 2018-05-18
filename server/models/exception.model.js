@@ -18,7 +18,8 @@ const ExceptionSchema = new Schema({
     type: Object,
     default: '{}'
   },
-  filters: Object
+  filters: Object,
+  excelFileName: String
 });
 ExceptionSchema.index({
   accountName: 1
