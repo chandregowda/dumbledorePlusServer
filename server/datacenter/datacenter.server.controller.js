@@ -27,8 +27,7 @@ Datacenter.create = function (req, res) {
         // Fetch newly stored datacenter data
         result = {
           message: 'NEW_USER',
-          details: { ...req.body.data
-          }
+          details: req.body.data
         }
       }
       return res.json(result);

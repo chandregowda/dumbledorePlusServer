@@ -27,8 +27,7 @@ User.create = function (req, res) {
 				// Fetch newly stored user data
 				result = {
 					message: 'NEW_USER',
-					details: { ...req.body.data
-					}
+					details: req.body.data
 				}
 			}
 			return res.json(result);

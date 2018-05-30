@@ -33,8 +33,7 @@ Download.create = function (req, res) {
         // Fetch newly stored downloads data
         result = {
           message: 'NEW_DOWNLOAD',
-          details: { ...req.body
-          }
+          details: req.body
         }
       }
       return res.json(result);
