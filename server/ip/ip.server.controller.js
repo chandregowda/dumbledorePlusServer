@@ -1,3 +1,5 @@
+const IpModel = require('../models/ip.model');
+
 const {
   CONFIG
 } = require('../../config/config');
@@ -9,32 +11,33 @@ module.exports = {
 
 const fetch = require('node-fetch');
 
-const createExcel = (json) => {
+const createExcel = (filename, json) => {
   return new Promise((resolve, reject) => {
     const utils = require('../utils');
+    // console.log(JSON.stringify(json, undefined, 2));
     utils.writeToExcel({
       jsonData: json,
       folder: CONFIG.processDetailsFilePath,
-      filename: 'Ip.xlsx'
+      filename
     }).then(r => resolve(r)).catch(e => reject(e));
   });
 }
 
+// Get
 Ip.get = function (req, res) {
-  console.log("Getting Ip details");
-  // fetch('https://dumbledore.yodlee.com/newprocess/get', 
-  fetch('https://dumbledore.yodlee.com/ip/get', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
+  let query = {}; // No filter
+  IpModel.get(query, function (err, result = {}) {
+
+    if (!err) {
+      if (!result) {
+        result = {};
       }
-    })
-    .then(result => result.json())
-    .then(json => {
-      // console.log(json)
-      console.log("Got Ip Details");
-      createExcel(json).then((r) => console.log(r)).catch(e => console.log(e));
-      res.send(json);
-    })
-    .catch(err => console.error(err));
+      let json = typeof result === 'string' ? JSON.parse(result) : result;
+      let filename = (req.decoded.sAMAccountName || 'unknown') + '_IpDetails.xlsx';
+      createExcel(filename, JSON.parse(JSON.stringify(json))).then((r) => console.log(r)).catch(e => console.log(e));
+      return res.send(json);
+    } else {
+      return res.status(500).send(err); // 500 error
+    }
+  });
 };

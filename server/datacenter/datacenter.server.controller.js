@@ -1,9 +1,5 @@
 'use strict';
-const mongoose = require('mongoose');
 const DatacenterModel = require('../models/datacenter.model');
-const DB_CONNECTION = require('../database/database.js');
-const moment = require('moment');
-
 const Datacenter = {};
 module.exports = {
   Datacenter
