@@ -17,6 +17,10 @@ var CONFIG = {
 	},
 	processDetailsFilePath: './downloads/',
 	webTokenKey: 'Agn18r@Hm05&C',
+
+	// CAPI details
+	capiPath: "/home/logmonitor/utils",
+
 	// mailServerConfig is to send mail on Feedback
 	mailServerConfig: {
 		options: {

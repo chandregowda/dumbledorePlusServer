@@ -6,4 +6,5 @@ const {
 module.exports = function (router, tokenValidator) {
   /** DB Activities */
   router.post('/process/get', tokenValidator, Process.get);
+  router.post('/process/getAllProcess', Process.getAllProcess);
 };
