@@ -16,6 +16,12 @@ var CONFIG = {
 		// proxyServer: 'http://172.18.7.250:3128' // This should be set to 'http://172.18.7.250:3128' for STAGE
 	},
 	processDetailsFilePath: './downloads/',
+
+	// Static files folders
+	PUBLIC_FOLDER: 'public',
+	DOWNLOADS_FOLDER: 'downloads',
+	LOGSUMMARY_FOLDER: 'logSummary',
+
 	webTokenKey: 'Agn18r@Hm05&C',
 
 	// CAPI details

@@ -39,8 +39,9 @@ if (cluster.isMaster) {
 	const path = require('path');
 	const fs = require('fs');
 
-	const PUBLIC_FOLDER = path.resolve(__dirname, '../public');
-	const DOWNLOADS_FOLDER = path.resolve(__dirname, '../downloads');
+	const PUBLIC_FOLDER = path.resolve(__dirname, '..', CONFIG.PUBLIC_FOLDER);
+	const DOWNLOADS_FOLDER = path.resolve(__dirname, '..', CONFIG.DOWNLOADS_FOLDER);
+	const LOGSUMMARY_FOLDER = path.resolve(__dirname, '..', CONFIG.LOGSUMMARY_FOLDER);
 
 	const express = require('express');
 	let app = express();
@@ -52,8 +53,12 @@ if (cluster.isMaster) {
 
 	const numberOfDaysToCache = 0.5; // days
 	const cacheTime = 86400000 * numberOfDaysToCache; // 1 days
-	// Static folder to server index.html
+
+	// Static folder to server index.html, logs and excels
 	app.use(express.static(DOWNLOADS_FOLDER, {
+		maxAge: cacheTime
+	}));
+	app.use(express.static(LOGSUMMARY_FOLDER, {
 		maxAge: cacheTime
 	}));
 	app.use(express.static(PUBLIC_FOLDER, {
