@@ -42,6 +42,7 @@ if (cluster.isMaster) {
 	const PUBLIC_FOLDER = path.resolve(__dirname, '..', CONFIG.PUBLIC_FOLDER);
 	const DOWNLOADS_FOLDER = path.resolve(__dirname, '..', CONFIG.DOWNLOADS_FOLDER);
 	const LOGSUMMARY_FOLDER = path.resolve(__dirname, '..', CONFIG.LOGSUMMARY_FOLDER);
+	const EXCEPTIONS_FOLDER = path.resolve(__dirname, '..', CONFIG.EXCEPTIONS_FOLDER);
 
 	const express = require('express');
 	let app = express();
@@ -59,6 +60,9 @@ if (cluster.isMaster) {
 		maxAge: cacheTime
 	}));
 	app.use(express.static(LOGSUMMARY_FOLDER, {
+		maxAge: cacheTime
+	}));
+	app.use(express.static(EXCEPTIONS_FOLDER, {
 		maxAge: cacheTime
 	}));
 	app.use(express.static(PUBLIC_FOLDER, {

@@ -21,6 +21,7 @@ var CONFIG = {
 	PUBLIC_FOLDER: 'public',
 	DOWNLOADS_FOLDER: 'downloads',
 	LOGSUMMARY_FOLDER: 'logSummary',
+	EXCEPTIONS_FOLDER: 'exceptions',
 
 	webTokenKey: 'Agn18r@Hm05&C',
 

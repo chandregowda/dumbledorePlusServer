@@ -1,6 +1,5 @@
 'use strict';
 const ExceptionModel = require('../models/exception.model');
-const request = require('request');
 const utils = require('../utils');
 const moment = require('moment');
 const path = require('path');
@@ -135,7 +134,7 @@ function getComponentExceptionSummary(filters) {
         })
         .then((result) => {
           responseCount++;
-          console.log(`[${trackingId}]SCAN Result :`, JSON.stringify(result, undefined, 2));
+          // console.log(`[${trackingId}]SCAN Result :`, JSON.stringify(result, undefined, 2));
           finalResult = finalResult.concat(JSON.parse(result));
           checkForComplete();
         })

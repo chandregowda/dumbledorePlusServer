@@ -111,7 +111,7 @@ exports.getOptions = (req, apiName) => {
   if (req.body.mailTo && typeof (req.body.mailTo) === "string" && req.body.mailTo.trim()) {
     options += ` --mailTo='${req.body.mailTo}'`;
   } else {
-    let mail = req.cookies.mail || CONFIG.mailServerConfig.sendTo;
+    let mail = req.cookies && req.cookies.mail ? req.cookies.mail : CONFIG.mailServerConfig.sendTo;
     options += ` --mailTo='${mail}'`;
   }
 
