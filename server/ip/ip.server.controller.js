@@ -69,7 +69,7 @@ function getAllIpDiskSpace(req) {
   return new Promise((resolve, reject) => {
     console.log("getAllIpDiskSpace with options", JSON.stringify(options, undefined, 2));
     utils.processCommand(apiName, options).then(response => {
-      console.log("getAllIpDiskSpace: Response received...", response);
+      console.log("getAllIpDiskSpace: Response received...");
       resolve(response);
     }).catch(e => {
       console.log("getAllIpDiskSpace: ERROR...", e);
