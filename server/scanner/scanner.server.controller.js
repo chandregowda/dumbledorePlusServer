@@ -342,7 +342,36 @@ Scanner.getLogSummary = function (req, res) {
     });
 }; // API: getLogSummary
 
+function formatConfigOutputSummary(ip, instance, details, deploymentMethod) {
+  let logFolder = getFolderToSearch({instance, deploymentMethod, logType:'config'});
 
+  let filename = path.resolve(logFolder, 'config.js');
+  let summary = [];
+  if (!details) return [];
+  let lines = details.split(/\n/);
+  // Loop through the output and create object
+  for (let i = 0; i < lines.length; i++) {
+    let line = lines[i];
+    line = line.replace(/\s*,\s*/, '');
+    line = line.replace(/\s*:\s*/, ' ');
+    line = line.trim();
+    // console.log(`Line : ${line}`)
+    let fields = line.split(' '); // count filename exception
+    if (fields.length >= 2) {
+        let key = fields.shift();
+        let value = fields.shift();
+        summary.push({
+        ip,
+        instance,
+        filename,
+        key,
+        value
+      });
+    }
+  }
+  console.log("Summary:", summary);
+  return summary;
+}
 
 function formatOutputSummary(ip, instance, details) {
   let summary = [];
@@ -394,7 +423,8 @@ function formatOutputSummary(ip, instance, details) {
 function getFolderToSearch(o) {
   let folderPath = "";
   let logPath = `/opt/${o.deploymentMethod}`;
-  let logFolder = 'node' + o.instance + '/brands';
+  let logFolder = 'node' + o.instance ;
+  logFolder += o.logType === 'params' ? '/brands' : '/conf' ;
 
   folderPath = path.resolve(logPath, logFolder);
   // console.log(`Log Folder to search for ${o.component} -> ${o.instance} -> ${o.deploymentMethod} is ${folderPath}`)
@@ -402,7 +432,7 @@ function getFolderToSearch(o) {
 } // Function : getFolderToSearch
 
 function getLookupFilePattern(o) {
-  return "-name params.js";
+  return o.logType === 'params' ? "-name params.js" : "-name config.js" ;
 } // Function : getLookupFilePattern
 
 function getSearchCommand(o) {
@@ -414,7 +444,17 @@ function getSearchCommand(o) {
   let logFolder = getFolderToSearch(o);
   let logFilePattern = getLookupFilePattern(o);
 
-  let command = `find ${logFolder} ${logFilePattern} -exec grep -P "(${searchString}).*=.*" {} + 2>/dev/null | sort | uniq -c | awk "{\\\$2=\\\$2};1"`;
+  let command = '';
+  if (o.logType === 'params') {
+    // separtated by =
+    command = `find ${logFolder} ${logFilePattern} -exec grep -P "(${searchString}).*=.*" {} + 2>/dev/null | sort | uniq -c | awk "{\\\$2=\\\$2};1"`;
+  } else {
+    // separated by :
+    let filename = path.resolve(logFolder, 'config.js');
+
+    command = `grep -P "(${searchString}).*:.*" ${filename} | sort | uniq | awk "{\\\$2=\\\$2};1"`;
+  }
+
   // console.log("getSearchCommand: ", command);
   return command;
 } // Function : getSearchCommand
@@ -432,7 +472,11 @@ function searchParamKeysInSingleInstance(options) {
     }).then((output) => {
       // console.log(`Searched Param key for ${options.ip}->${options.instance}->${options.component} completed.`);
       // console.log(output);
-      let formattedOutput = formatOutputSummary(options.ip, options.instance, output);
+
+      let formattedOutput = options.logType === 'params'
+        ? formatOutputSummary(options.ip, options.instance, output, options.logType)
+        : formatConfigOutputSummary(options.ip, options.instance, output, options.deploymentMethod);
+
       // console.log('FORMATTED Param Key OUTPUT', JSON.stringify(formattedOutput, undefined, 2));
       resolve(formattedOutput);
     }).catch(e => {
@@ -531,3 +575,4 @@ Scanner.searchParamKeyInAllNodeInstancesOLD = function (req, res) {
     })
   });
 }
+// End of Scanner

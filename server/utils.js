@@ -216,7 +216,8 @@ exports.loopThroughInstance = (filters, apiName, apiFunctionHandler) => {
     datacenters,
     searchDate,
     searchString,
-    processInfo
+    processInfo,
+    logType
   } = filters;
 
   console.log(`${currentTime} ${mailTo}: ${apiName} - Looping through ${processInfo.length} process`);
@@ -249,6 +250,7 @@ exports.loopThroughInstance = (filters, apiName, apiFunctionHandler) => {
         logDate: searchDate,
         searchString,
         trackingId,
+        logType
       };
 
       console.log(
